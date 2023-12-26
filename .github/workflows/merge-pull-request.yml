@@ -1,0 +1,131 @@
+name: merge the pull request workflow
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    types: [closed]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+      - name: Run Helm Lint
+        run: helm lint .
+ 
+  template:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+
+      - name: Run Helm Template
+        run: helm template .
+
+  package_and_push_to_github_pages:
+    needs: template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.TOKEN }}
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 3.13.0 
+  
+      - name: Helm Package
+        run: |
+          mkdir helm-package
+          ls 
+          helm package  . -d  helm-package --version 1.0.${{ github.run_number  }}
+          ls helm-package
+          echo "--------"
+          helm repo index ./helm-package
+          
+      - name: Commit and Push Package to helm repo
+        run: |
+          git config --global user.email "abdelrhmanali@gmail.com"
+          git config --global user.name "Abdelrhman Ali"
+         
+          git checkout --orphan helm-repo | true
+                    
+          git rm -rf . 
+          
+          git add helm-package
+         
+          git commit -m "Initialize new-branch as an orphan branch"
+
+          git push origin helm-repo --force
+
+
+  package_to_docker_hub:
+    needs: package_and_push_to_github_pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repositor
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.TOKEN }}
+          ref: 'helm-repo'
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 3.13.0 
+  
+      - name: push the chart to docker hub
+        run: |
+          cd helm-package
+          echo ${{secrets.DOCKER_TOKEN}} | helm registry login registry-1.docker.io -u abdelrhmandevops --password-stdin 
+          helm push helm-releas* oci://registry-1.docker.io/abdelrhmandevops
+
+  deploy:
+    needs: package_to_docker_hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.13.0 
+
+      - name: install kubectl
+        uses: azure/setup-kubectl@v3
+        id: install
+        
+      - name: AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: connect to the cluster
+        run: |
+          aws eks update-kubeconfig --region us-east-2 --name my-eks-cluster
+          cat /home/runner/.kube/config
+          
+      - name: Run Helm 
+        run: helm upgrade my-chart --install  . --kubeconfig /home/runner/.kube/config
+
+
+
