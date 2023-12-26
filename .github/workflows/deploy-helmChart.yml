@@ -56,8 +56,8 @@ jobs:
       - name: AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID1 }}
-          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY1 }}
+          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
       - name: connect to the cluster
