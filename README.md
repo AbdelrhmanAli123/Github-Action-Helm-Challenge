@@ -5,7 +5,7 @@
 ##
 ## :zap: DevOps Assignment
 
-![Capture](https://github.com/AbdelrhmanAli123/github-action-k8s-helm-challenge/assets/133269614/8be0f33e-7294-4eef-b605-2e2262ac5fa4)
+![devops](https://github.com/AbdelrhmanAli123/Github-Action-Helm-Challenge/assets/133269614/ef7a8c67-28ea-497d-817e-615e3d17a40f)
 
 ## 
 ## :scroll: Overview
