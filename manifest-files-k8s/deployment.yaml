@@ -1,32 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Values.deployment.name}}
+  name: nginx-deployment
 spec:
-  replicas: {{.Values.deployment.replicas}}
+  replicas: 2
   selector:
     matchLabels:
-      app: {{.Values.deployment.label}}
+      app: nginx
   template:
     metadata:
       labels:
-        app: {{.Values.deployment.label}}
+        app: nginx
     spec:
       containers:
-        - name: {{.Values.deployment.containerName}}
-          image: {{.Values.deployment.image}}
+        - name: nginx-container
+          image: nginx
           ports:
-            - containerPort: {{.Values.deployment.containerPort}}
+            - containerPort: 80
           volumeMounts:
             - name: html
               mountPath: /usr/share/nginx/html
       volumes:
         - name: html
           configMap:
-            name: {{.Values.configmap.name}}
+            name: nginx-configmap
             items:
               - key: index2.html
                 path: k8s/index2.html
               - key: index.html
                 path: k8s/index.html
-
