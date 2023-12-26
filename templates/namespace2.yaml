@@ -1,0 +1,6 @@
+// this for test the helm diff utility 
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: helm-diff-ns
