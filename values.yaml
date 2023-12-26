@@ -1,6 +1,6 @@
 deployment:
   name: nginx-deployment
-  replicas: 3
+  replicas: 2
   label: nginx
   image: nginx
   containerName: nginx-container
