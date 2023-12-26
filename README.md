@@ -5,7 +5,7 @@
 ##
 ## :zap: DevOps Assignment
 
-![devops](https://github.com/AbdelrhmanAli123/Github-Action-Helm-Challenge/assets/133269614/ef7a8c67-28ea-497d-817e-615e3d17a40f)
+![DevOps-task](https://github.com/AbdelrhmanAli123/Github-Action-Helm-Challenge/assets/133269614/d71a227a-e8ac-49dc-82c9-663f31659d04)
 
 ## 
 ## :scroll: Overview
