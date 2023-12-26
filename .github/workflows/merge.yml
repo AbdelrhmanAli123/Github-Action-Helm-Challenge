@@ -124,5 +124,8 @@ jobs:
           aws eks update-kubeconfig --region us-east-2 --name my-eks-cluster
           cat /home/runner/.kube/config
           
-      - name: Run Helm 
-        run: helm upgrade my-chart --install  . --kubeconfig /home/runner/.kube/config
+      - name: add Helm repo and Run Helm 
+        run: |
+          helm repo add my-task-repo https://abdelrhmanali123.github.io/github-action-k8s-helm-challenge/helm-package
+          
+          helm upgrade my-chart --install  my-task-repo/helm-releas --kubeconfig /home/runner/.kube/config
