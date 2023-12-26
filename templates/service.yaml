@@ -1,26 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service1
+  name: {{ .Values.service1.name }}
 spec:
   ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
+  - port: {{ .Values.service1.port }}
+    protocol: {{ .Values.service1.protocol }}
+    targetPort: {{ .Values.service1.targetPort }}
   selector:
-    app: nginx
+    app: {{ .Values.service1.selector }}
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: service2
+  name: {{ .Values.service2.name }}
 spec:
   ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 80
-  type: NodePort
+  - port: {{ .Values.service2.port }}
+    protocol: {{ .Values.service2.protocol }}
+    targetPort: {{ .Values.service2.targetPort }}
+  type: {{ .Values.service2.type }}
   selector:
-    app: nginx
+    app: {{ .Values.service1.selector }}
 
