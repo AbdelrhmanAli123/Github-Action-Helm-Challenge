@@ -1,5 +1,5 @@
 deployment:
-  name: nginx-deployment
+  name: nginx-deploymentt
   replicas: 2
   label: nginx
   image: nginx
