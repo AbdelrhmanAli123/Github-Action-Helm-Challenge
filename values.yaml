@@ -1,0 +1,41 @@
+deployment:
+  name: nginx-deployment
+  replicas: 2
+  label: nginx
+  image: nginx
+  containerName: nginx-container
+  containerPort: 80
+
+
+service1:
+  name1: service1
+  label: nginx
+  port: 80
+  targetPort: 80
+  protocol: TCP
+      
+
+service2:
+  name2: service2
+  label: nginx
+  port: 8080
+  targetPort: 80
+  protocol: TCP
+
+configmap:
+  name: nginx-configmap
+
+
+cronjob1:
+  name: random-string-generator
+  containerName: container-random-string-generator
+  image: busybox
+  restartPolicy: OnFailure
+
+cronjob2: 
+  name1: call-index-html
+  name2: call-index-html
+  containerName1: curl-container
+  containerName2: curl-container
+  image: curlimages/curl:latest
+  restartPolicy: OnFailure

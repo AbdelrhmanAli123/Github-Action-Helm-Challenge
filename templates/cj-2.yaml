@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{.Values.cronjob2.name1}}
+spec:
+  schedule: "* * * * *"  # Runs every 5 minutes. You can adjust the schedule as needed.
+  jobTemplate:
+    spec: 
+      template:
+        spec:
+          containers:
+          - name: {{.Values.cronjob2.containerName1}}
+            image: {{.Values.cronjob2.image}}  # Using the curl container image
+            command:
+              - "curl"
+              - "http://service1/k8s/index2.html"  
+          restartPolicy: OnFailure
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{.Values.cronjob2.name2}}
+  namespace: new-ns
+spec:
+  schedule: "* * * * *"  
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{.Values.cronjob2.containerName2}}
+            image: {{.Values.cronjob2.image}} 
+            command:
+              - "curl"
+              - "http://service2.default.svc.cluster.local:8080/k8s/index2.html"  
+          restartPolicy: OnFailure
+
+
