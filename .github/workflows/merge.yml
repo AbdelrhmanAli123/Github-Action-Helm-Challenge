@@ -1,4 +1,4 @@
-name: second workflow
+name: merge the pull request workflow
 
 on:
   pull_request:
@@ -97,10 +97,8 @@ jobs:
           helm push helm-releas* oci://registry-1.docker.io/abdelrhmandevops
 
   deploy:
-    needs: template
+    needs: package_to_docker_hub
     runs-on: ubuntu-latest
-    env:
-      aws_region: us-east-2
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -123,10 +121,8 @@ jobs:
 
       - name: connect to the cluster
         run: |
-          aws s3 ls
           aws eks update-kubeconfig --region us-east-2 --name my-eks-cluster
           cat /home/runner/.kube/config
-          kubectl get pods
           
       - name: Run Helm 
         run: helm upgrade my-chart --install  . --kubeconfig /home/runner/.kube/config
