@@ -8,19 +8,21 @@ deployment:
 
 
 service1:
-  name1: service1
+  name: service1
   label: nginx
   port: 80
   targetPort: 80
   protocol: TCP
+  selector: nginx
       
 
 service2:
-  name2: service2
+  name: service2
   label: nginx
   port: 8080
   targetPort: 80
   protocol: TCP
+  type: NodePort
 
 configmap:
   name: nginx-configmap
