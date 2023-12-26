@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: call-index-html
+spec:
+  schedule: "* * * * *"  # Runs every 5 minutes. You can adjust the schedule as needed.
+  jobTemplate:
+    spec: 
+      template:
+        spec:
+          containers:
+          - name: curl-container
+            image: curlimages/curl:latest  # Using the curl container image
+            command:
+              - "curl"
+              - "http://service1/k8s/index2.html"  
+          restartPolicy: OnFailure
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: call-index-html
+  namespace: new-ns
+spec:
+  schedule: "* * * * *"  
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: curl-container
+            image: curlimages/curl:latest 
+            command:
+              - "curl"
+              - "http://service2.default.svc.cluster.local:8080/k8s/index2.html"  
+          restartPolicy: OnFailure

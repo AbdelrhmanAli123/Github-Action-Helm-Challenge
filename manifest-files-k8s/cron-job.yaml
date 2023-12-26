@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: random-string-generator
+spec:
+  schedule: "*/5 * * * *"  # Runs every 5 minutes. You can adjust the schedule as needed.
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: container-random-string-generator
+            image: busybox  # Replace with an image that 
+            command:
+              - "/bin/sh"
+              - "-c"
+              - |
+                echo "Random String: $(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10)"
+                echo "Pod Name: $(hostname)"
+          restartPolicy: OnFailure
