@@ -23,7 +23,7 @@ spec:
       volumes:
         - name: html
           configMap:
-            name: nginx-configmap
+            name: {{.Values.configmap.name}}
             items:
               - key: index2.html
                 path: k8s/index2.html
