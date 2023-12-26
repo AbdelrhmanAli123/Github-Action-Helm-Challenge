@@ -64,7 +64,7 @@ jobs:
           git config --global user.email "abdelrhmanali@gmail.com"
           git config --global user.name "Abdelrhman Ali"
          
-          git checkout --orphan new-branch | true
+          git checkout --orphan helm-repo | true
                     
           git rm -rf . 
           
@@ -72,7 +72,7 @@ jobs:
          
           git commit -m "Initialize new-branch as an orphan branch"
 
-          git push origin new-branch --force
+          git push origin helm-repo --force
 
 
   package_to_docker_hub:
@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.TOKEN }}
-          ref: 'new-branch'
+          ref: 'helm-repo'
 
       - name: Setup Helm
         uses: azure/setup-helm@v1
@@ -117,8 +117,8 @@ jobs:
       - name: AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID1 }}
-          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY1 }}
+          aws-access-key-id: ${{ secrets.MY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.MY_AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
       - name: connect to the cluster
